@@ -1,0 +1,140 @@
+
+*******************************************************************
+ USER: ICAIDUBLIN\EbizUser_test
+ PURPOSE: Provide Permissions to ICAIDUBLIN\EbizUser_test 
+Author: Bhavesh Dalal
+********************************************************************/
+
+DECLARE @User NVARCHAR(200) = 'ICAIDUBLIN\EbizUser_test';
+
+
+/* =====================================================
+   ROLE MEMBERSHIP
+===================================================== */
+USE [APTIFY];
+GO
+
+EXEC sp_addrolemember '_cgi_Users', @User;
+EXEC sp_addrolemember 'EndUsers', @User;
+EXEC sp_addrolemember '_cgi_Basic', @User;
+EXEC sp_addrolemember '_cgi_EbizUser_Group', @User;
+
+
+/* =====================================================
+   STEP 1–34 : CORE TABLES
+===================================================== */
+GRANT SELECT, INSERT, UPDATE, DELETE, CONTROL 
+ON dbo.Product TO @User WITH GRANT OPTION;
+
+GRANT SELECT, INSERT, UPDATE, DELETE, CONTROL 
+ON dbo.Subscription TO @User WITH GRANT OPTION;
+
+GRANT SELECT, INSERT, UPDATE, DELETE, CONTROL 
+ON dbo.ProductAttribute TO @User WITH GRANT OPTION;
+
+GRANT SELECT, INSERT, ALTER 
+ON dbo.FirmDirectoryLookupTableDaily__cai TO @User WITH GRANT OPTION;
+
+GRANT EXECUTE ON dbo.spCheckForMembershipAccess_OLD TO @User;
+GRANT EXECUTE ON dbo.spCheckForMembershipAccess__cai TO @User;
+GRANT EXECUTE ON dbo.spGetCountry TO @User;
+GRANT EXECUTE ON dbo.spCreateAMLWhistleblowing__cai TO @User;
+GRANT EXECUTE ON dbo.spGetCountryDependencies TO @User;
+
+GRANT EXECUTE ON dbo.spGetStudentEnrollStaging__c TO @User;
+GRANT EXECUTE ON dbo.spCreateStudentEnrollStaging__c TO @User;
+GRANT EXECUTE ON dbo.spUpdateStudentEnrollStaging__c TO @User;
+GRANT EXECUTE ON dbo.spDeleteStudentEnrollStaging__c TO @User;
+GRANT EXECUTE ON dbo.spGetStudentEnrollStaging__cDependencies TO @User;
+
+GRANT EXECUTE ON dbo.spGetPersonCellPhone TO @User;
+
+GRANT EXECUTE ON dbo.spGetBookInfoForTopicCode__sd TO @User WITH GRANT OPTION;
+GRANT EXECUTE ON dbo.spGetOfflineCPDInfoForTopicCode__sd TO @User WITH GRANT OPTION;
+GRANT EXECUTE ON dbo.spGetOnlineCPDInfoForTopicCode__sd TO @User WITH GRANT OPTION;
+
+
+GRANT SELECT ON dbo.vwPersons (EmploymentStatusID__c) TO @User;
+GRANT SELECT ON dbo.vwCountries TO @User;
+GRANT SELECT ON dbo.vwStudentEnrollStaging__c TO @User;
+
+
+GRANT SELECT ON dbo.SubscriptionStatus TO @User WITH GRANT OPTION;
+GRANT SELECT ON dbo.TradingNames__c TO @User WITH GRANT OPTION;
+GRANT SELECT ON dbo.EnhancedListingAdmin__cai TO @User WITH GRANT OPTION;
+GRANT SELECT ON dbo.Citycountycountry__cai TO @User WITH GRANT OPTION;
+GRANT SELECT ON dbo.EnhancedListingEditForm__cai TO @User WITH GRANT OPTION;
+GRANT SELECT ON dbo.EnhancedListingEmailLog TO @User WITH GRANT OPTION;
+GRANT SELECT ON dbo.CompanyAlias__c TO @User WITH GRANT OPTION;
+
+
+GRANT SELECT ON dbo.GenerateExamNumberType__c TO @User WITH GRANT OPTION;
+GRANT SELECT ON dbo.PendingEnrollmentStaging__c TO @User WITH GRANT OPTION;
+GRANT SELECT ON dbo.PendingTimeTableEnrollmentStaging__c TO @User WITH GRANT OPTION;
+GRANT SELECT ON dbo.tblTopicCodes__sd TO @User WITH GRANT OPTION;
+
+
+GRANT EXECUTE ON TYPE::dbo.StudentsWithRule__c TO @User;
+
+
+/* =====================================================
+   CONNECTION
+===================================================== */
+GRANT CONNECT TO @User;
+
+
+/* =====================================================
+   STEP 38 : DEFAULT SCHEMA
+===================================================== */
+ALTER USER [ICAIDUBLIN\EbizUser_test]
+WITH DEFAULT_SCHEMA = dbo;
+
+
+
+/* =====================================================
+   STEP 35 : SITEFINITY12 (voa_keygen)
+===================================================== */
+USE [Sitefinity12];
+GO
+
+GRANT SELECT ON dbo.voa_keygen TO [ICAIDUBLIN\EbizUser_test];
+GRANT UPDATE ON dbo.voa_keygen TO [ICAIDUBLIN\EbizUser_test];
+
+
+
+------------------------------------------------------
+-- CONNECT Permission 
+------------------------------------------------------
+GRANT CONNECT TO [ICAIDUBLIN\EbizUser_test];
+
+/* =====================================================
+   STEP 36 : vwPersons SECURABLE
+===================================================== */
+-- GRANT SELECT ON dbo.vwPersons (EmploymentStatusID__c)
+
+
+------------------------------------------------------
+-- Step 39 : db_owner 
+------------------------------------------------------
+EXEC sp_addrolemember 'db_owner', 'ICAIDUBLIN\EbizUser_test';
+
+
+
+
+------------------------------------------------------
+-- STEP 38 : DEFAULT SCHEMA (Sitefinity12)
+------------------------------------------------------
+ALTER USER [ICAIDUBLIN\EbizUser_test]
+WITH DEFAULT_SCHEMA = dbo;
+
+
+
+
+/* =====================================================
+   NOTES
+===================================================== */
+--  Step 35 handled (Sitefinity12)
+--  Step 36 handled via GRANT
+--  Step 37  needs confirmation
+--  Step 38 completed
+--  All objects aligned with S.No list
