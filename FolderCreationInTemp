@@ -1,0 +1,27 @@
+//Below is the PowerShell script used in the automation job FolderCreationInTemp in Task Scheduler: 
+
+New-Item -Path "D:\" -Name "Data" -ItemType Directory 
+
+$path = "D:\Data" 
+
+ $identity = 'Everyone'   
+
+ $rights = 'FullControl'   
+
+ $type = 'Allow'  
+
+ $inheritance = 'ContainerInherit, ObjectInherit'   
+
+ $propagate = 'None' 
+
+  $ace = New-Object System.Security.AccessControl.FileSystemAccessRule($identity, $rights, $inheritance, $propagate, $type)   
+
+   # Apply to existing file system object   
+
+   $acl = Get-Acl -Path $path   
+
+   $acl.AddAccessRule($ace)   
+
+   Set-Acl -Path $path -AclObject $acl   
+
+Restart-Service -Force MSSQLSERVER `` 
